@@ -33,7 +33,7 @@ const loadCategoriesVideos = (id) => {
 //remove active class
 const removeActiveClass = () => {
     const getAllActiveBtn = document.getElementsByClassName('removeId')
-    for(btn of getAllActiveBtn){
+    for (btn of getAllActiveBtn) {
         btn.classList.remove('active')
     }
 }
@@ -60,6 +60,31 @@ const displayCategories = (categories) => {
     })
 }
 
+
+//Load video Details 
+const showDetails = async (videoId) => {
+    // console.log(videoId)
+    const url = `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    showDetailsInModal(data.video)
+
+}
+
+
+const showDetailsInModal = (data) => {
+    // console.log(data)
+    const modalContainer = document.getElementById('modal-content');
+    modalContainer.innerHTML = `
+
+        <img  src="${data.thumbnail}" />
+        <p class="text-justify pt-2">${data.description}</p>
+    `
+    
+
+    //show modal way-1
+    document.getElementById('showModalBtn').click()
+}
 
 
 //     {
@@ -134,8 +159,9 @@ const displayVideos = (videos) => {
             }
         </figure>
         
-        <div class="px-0 py-2 flex gap-2">
-          <div>
+        <div class="px-0 py-2 flex justify-between gap-2">
+         <div class="flex gap-2">
+             <div>
             <img class ="w-10 h-10 rounded-full object-cover" src=${video.authors[0].profile_picture}/>
           </div>
           <div>
@@ -144,8 +170,16 @@ const displayVideos = (videos) => {
                 <p class="text-gray-400">${video.authors[0].profile_name}</p>
                 ${video.authors[0].verified == true ? `<img class="w-5 h-5" src="https://img.icons8.com/?size=48&id=D9RtvkuOe31p&format=png"/>` : ""}
             </div>
-            <p></p>
-          </div>
+            </div>
+
+         </div>
+            <div>
+              <p>
+                    <button class = 'btn active2' onclick="showDetails('${video.video_id}')">
+                        Details
+                    <button>
+              </p>
+            </div>
         </div>
         `
 
